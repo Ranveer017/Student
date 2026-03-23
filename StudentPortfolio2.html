@@ -367,18 +367,35 @@
 <!-- ═══════ MAIN SCRIPT (regular — no type=module, so window scope works) ═══════ -->
 <script>
 /* ─────────────────────────────────────────────────────────────
-   🔧  REPLACE THESE with your real values from:
-   Firebase Console → Project Settings → Your Apps → SDK config
+   🔧  HOW TO FILL THIS IN:
+
+   STEP 1 — Firebase API Key + App details:
+     Firebase Console → Project Settings → Your Apps → SDK config
+     Copy apiKey, messagingSenderId, appId from there.
+
+   STEP 2 — OAuth Client ID (THIS is what fixes the auth error):
+     Google Cloud Console (console.cloud.google.com)
+     → APIs & Services → Credentials
+     → OAuth 2.0 Client IDs → your Web Client
+     → Copy the Client ID  (looks like: 123456789-xxxx.apps.googleusercontent.com)
+     → Paste it as OAUTH_CLIENT_ID below.
+
+   STEP 3 — In Firebase Console:
+     → Authentication → Sign-in method → Google → Enable
+     → Paste that same OAuth Client ID into "Web SDK configuration"
 ───────────────────────────────────────────────────────────── */
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
+  apiKey:            "YOUR_FIREBASE_API_KEY",           // from Firebase Console → Project Settings
   authDomain:        "student-portfolio-f7e64.firebaseapp.com",
   databaseURL:       "https://student-portfolio-f7e64-default-rtdb.firebaseio.com",
   projectId:         "student-portfolio-f7e64",
   storageBucket:     "student-portfolio-f7e64.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  messagingSenderId: "YOUR_SENDER_ID",                  // from Firebase Console → Project Settings
+  appId:             "YOUR_APP_ID"                      // from Firebase Console → Project Settings
 };
+
+/* 🔑 OAuth Client ID from Google Cloud Console → APIs & Services → Credentials */
+const OAUTH_CLIENT_ID = "YOUR_OAUTH_CLIENT_ID.apps.googleusercontent.com";
 
 const ADMIN_EMAIL = "ranveer.shinde.work@gmail.com";
 
@@ -451,7 +468,11 @@ db   = firebase.database();
 document.getElementById("googleSignInBtn").addEventListener("click", async () => {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: "select_account" });
+    // ✅ Inject the OAuth Client ID — this is what fixes the api-key-not-valid error
+    provider.setCustomParameters({
+      prompt:    "select_account",
+      client_id: OAUTH_CLIENT_ID
+    });
     await auth.signInWithPopup(provider);
   } catch(e) {
     toast("Sign-in failed: " + e.message, "error");
