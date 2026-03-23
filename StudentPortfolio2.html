@@ -394,8 +394,9 @@ const firebaseConfig = {
   appId:             "YOUR_APP_ID"                      // from Firebase Console → Project Settings
 };
 
-/* 🔑 OAuth Client ID from Google Cloud Console → APIs & Services → Credentials */
-const OAUTH_CLIENT_ID = "YOUR_OAUTH_CLIENT_ID.apps.googleusercontent.com";
+/* 🔑 OAuth Client ID is NOT needed in code — just enable Google Sign-In
+   in Firebase Console → Authentication → Sign-in method → Google,
+   and paste your OAuth Client ID there. Firebase handles it automatically. */
 
 const ADMIN_EMAIL = "ranveer.shinde.work@gmail.com";
 
@@ -468,11 +469,7 @@ db   = firebase.database();
 document.getElementById("googleSignInBtn").addEventListener("click", async () => {
   try {
     const provider = new firebase.auth.GoogleAuthProvider();
-    // ✅ Inject the OAuth Client ID — this is what fixes the api-key-not-valid error
-    provider.setCustomParameters({
-      prompt:    "select_account",
-      client_id: OAUTH_CLIENT_ID
-    });
+    provider.setCustomParameters({ prompt: "select_account" });
     await auth.signInWithPopup(provider);
   } catch(e) {
     toast("Sign-in failed: " + e.message, "error");
