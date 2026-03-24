@@ -534,9 +534,12 @@ function renderBar(user) {
     editMode = false; auth.signOut();
   });
   document.getElementById("btn-edit")?.addEventListener("click", () => {
+    portDataBackup = JSON.parse(JSON.stringify(portData));
     editMode = true; render(); renderBar(auth.currentUser);
   });
   document.getElementById("btn-cancel")?.addEventListener("click", () => {
+    if (portDataBackup) portData = portDataBackup;
+    portDataBackup = null;
     editMode = false; render(); renderBar(auth.currentUser);
   });
   document.getElementById("btn-save")?.addEventListener("click", saveAll);
@@ -569,27 +572,37 @@ async function saveAll() {
       portData.stats[k+"_lbl"] = g("e-"+k+"-lbl");
     });
 
-    portData.experience = portData.experience.map((ex,i) => ({
+    portData.experience = (portData.experience||[]).map((ex,i) => ({
       ...ex,
       role:    g(`e-exp-role-${i}`),
       company: g(`e-exp-co-${i}`),
       period:  g(`e-exp-per-${i}`),
-      desc:    g(`e-exp-desc-${i}`)
+      desc:    g(`e-exp-desc-${i}`),
+      accent:  g(`e-exp-accent-${i}`) || ex.accent
     }));
 
-    portData.projects = portData.projects.map((p,i) => ({
+    portData.projects = (portData.projects||[]).map((p,i) => ({
       ...p,
       name:  g(`e-proj-name-${i}`),
       desc:  g(`e-proj-desc-${i}`),
       tags:  g(`e-proj-tags-${i}`),
-      stars: parseInt(g(`e-proj-stars-${i}`)) || p.stars
+      stars: parseInt(g(`e-proj-stars-${i}`)) || p.stars,
+      color: g(`e-proj-color-${i}`) || p.color
     }));
 
-    portData.education = portData.education.map((e,i) => ({
+    portData.education = (portData.education||[]).map((e,i) => ({
       ...e,
+      icon:   g(`e-edu-icon-${i}`) || e.icon,
       school: g(`e-edu-school-${i}`),
       degree: g(`e-edu-deg-${i}`),
       year:   g(`e-edu-year-${i}`)
+    }));
+
+    portData.tools = (portData.tools||[]).map((t,i) => ({
+      ...t,
+      name:  g(`e-tool-name-${i}`) || t.name,
+      i:     g(`e-tool-i-${i}`) || t.i,
+      color: g(`e-tool-color-${i}`) || t.color
     }));
 
     await db.ref("portfolio").set(portData);
@@ -664,9 +677,11 @@ function render() {
         ${i < portData.experience.length - 1 ? '<div class="exp-line"></div>' : ""}
       </div>
       <div style="flex:1;min-width:0">
+        ${E ? `<div class="arr-bar"><button class="arr-del" onclick="delArr('experience',${i})" title="Remove">−</button><span class="arr-lbl">experience #${i+1}</span></div>` : ""}
         <div class="exp-period">${E ? `<input class="ef ef-sm" id="e-exp-per-${i}" value="${x(exp.period)}"/>` : x(exp.period)}</div>
         <div class="exp-role">${E ? `<input class="ef" id="e-exp-role-${i}" value="${x(exp.role)}"/>` : x(exp.role)}</div>
         <div class="exp-co">${E ? `<input class="ef ef-sm" id="e-exp-co-${i}" value="${x(exp.company)}"/>` : x(exp.company)}</div>
+        ${E ? `<div class="ef-hint">Accent: <input class="ef ef-sm" id="e-exp-accent-${i}" value="${x(exp.accent)}" style="display:inline;width:80px"/></div>` : ""}
         <div class="exp-desc${E ? " open" : ""}" id="edesc-${i}">${E ? `<textarea class="ef ef-ta" id="e-exp-desc-${i}">${x(exp.desc)}</textarea>` : x(exp.desc)}</div>
       </div>`;
     if (!E) {
@@ -689,6 +704,7 @@ function render() {
     }
     expEl.appendChild(item);
   });
+  if (E) { const ab=document.createElement("div"); ab.className="arr-bar"; ab.innerHTML=`<button class="arr-add" onclick="addArr('experience')" title="Add">+</button><span class="arr-lbl">add experience</span>`; expEl.appendChild(ab); }
 
   /* ── projects ── */
   const projEl = document.getElementById("proj-list");
@@ -698,6 +714,7 @@ function render() {
     card.className = "proj-card";
     card.style.setProperty("--pc", p.color);
     card.innerHTML = `
+      ${E ? `<div class="arr-bar"><button class="arr-del" onclick="delArr('projects',${i})" title="Remove">−</button><span class="arr-lbl">project #${i+1}</span></div>` : ""}
       <div class="proj-hdr">
         <div class="proj-name" style="color:${p.color}">
           ${E ? `<input class="ef" id="e-proj-name-${i}" value="${x(p.name)}"/>` : x(p.name)}
@@ -706,10 +723,12 @@ function render() {
       </div>
       <div class="proj-desc">${E ? `<textarea class="ef ef-ta" id="e-proj-desc-${i}">${x(p.desc)}</textarea>` : x(p.desc)}</div>
       ${E
-        ? `<div class="ef-hint">Tags (comma-separated):</div><input class="ef ef-sm" id="e-proj-tags-${i}" value="${x(p.tags)}"/>`
+        ? `<div class="ef-hint">Tags (comma-separated):</div><input class="ef ef-sm" id="e-proj-tags-${i}" value="${x(p.tags)}"/>
+           <div class="ef-hint">Color hex:</div><input class="ef ef-sm" id="e-proj-color-${i}" value="${x(p.color)}" style="width:90px"/>`
         : `<div class="proj-tags">${(p.tags||"").split(",").map(t=>`<span class="proj-tag">${t.trim()}</span>`).join("")}</div>`}`;
     projEl.appendChild(card);
   });
+  if (E) { const ab=document.createElement("div"); ab.className="arr-bar"; ab.innerHTML=`<button class="arr-add" onclick="addArr('projects')" title="Add">+</button><span class="arr-lbl">add project</span>`; projEl.appendChild(ab); }
 
   /* ── education ── */
   const eduEl = document.getElementById("edu-wrap");
@@ -718,7 +737,8 @@ function render() {
     const item = document.createElement("div");
     item.className = "edu-item";
     item.innerHTML = `
-      <div class="edu-icon" style="background:${edu.bg}">${edu.icon}</div>
+      ${E ? `<button class="arr-del" onclick="delArr('education',${i})" title="Remove" style="align-self:start;margin-top:.2rem">−</button>` : ""}
+      <div class="edu-icon" style="background:${edu.bg}">${E ? `<input class="ef ef-sm" id="e-edu-icon-${i}" value="${edu.icon}" style="width:36px;text-align:center"/>` : edu.icon}</div>
       <div>
         <div class="edu-school">${E ? `<input class="ef" id="e-edu-school-${i}" value="${x(edu.school)}"/>` : x(edu.school)}</div>
         <div class="edu-degree">${E ? `<input class="ef ef-sm" id="e-edu-deg-${i}" value="${x(edu.degree)}"/>` : x(edu.degree)}</div>
@@ -726,22 +746,33 @@ function render() {
       </div>`;
     eduEl.appendChild(item);
   });
+  if (E) { const ab=document.createElement("div"); ab.className="arr-bar"; ab.innerHTML=`<button class="arr-add" onclick="addArr('education')" title="Add">+</button><span class="arr-lbl">add education</span>`; eduEl.appendChild(ab); }
+
+  /* ── tools (dynamic) ── */
+  const tw = document.getElementById("tools-wrap");
+  tw.innerHTML = "";
+  (portData.tools || []).forEach((t, idx) => {
+    if (E) {
+      const row = document.createElement("div");
+      row.className = "tool-edit-row";
+      row.innerHTML = `<button class="arr-del" onclick="delArr('tools',${idx})" title="Remove">−</button>
+        <input class="ef ef-sm" id="e-tool-i-${idx}" value="${x(t.i)}" style="width:40px" placeholder="Abbr"/>
+        <input class="ef ef-sm" id="e-tool-name-${idx}" value="${x(t.name)}" style="width:110px" placeholder="Name"/>
+        <input class="ef ef-sm" id="e-tool-color-${idx}" value="${x(t.color)}" style="width:76px" placeholder="#hex"/>`;
+      tw.appendChild(row);
+    } else {
+      const el = document.createElement("div");
+      el.className = "tb";
+      el.style.cssText = `background:${t.bg};border:1px solid ${t.color}22;animation-delay:${idx*45+320}ms`;
+      el.innerHTML = `<span class="ti" style="color:${t.color};box-shadow:0 0 8px ${t.color}44">${t.i}</span><span class="tn">${t.name}</span>`;
+      tw.appendChild(el);
+    }
+  });
+  if (E) { const ab=document.createElement("div"); ab.className="arr-bar"; ab.innerHTML=`<button class="arr-add" onclick="addArr('tools')" title="Add">+</button><span class="arr-lbl">add tool</span>`; tw.appendChild(ab); }
 
   /* editing border */
   document.querySelectorAll(".card").forEach(c => c.classList.toggle("editing", E));
 }
-
-/* ════════════════════════════════════════
-   TOOLS (static)
-════════════════════════════════════════ */
-const tw = document.getElementById("tools-wrap");
-TOOLS.forEach((t, idx) => {
-  const el = document.createElement("div");
-  el.className = "tb";
-  el.style.cssText = `background:${t.bg};border:1px solid ${t.color}22;animation-delay:${idx*45+320}ms`;
-  el.innerHTML = `<span class="ti" style="color:${t.color};box-shadow:0 0 8px ${t.color}44">${t.i}</span><span class="tn">${t.name}</span>`;
-  tw.appendChild(el);
-});
 
 /* ════════════════════════════════════════
    UTILS
@@ -755,6 +786,59 @@ function toast(msg, type="info") {
   document.body.appendChild(t);
   requestAnimationFrame(() => t.classList.add("in"));
   setTimeout(() => { t.classList.remove("in"); setTimeout(() => t.remove(), 350); }, 3000);
+}
+
+/* ════════════════════════════════════════
+   DYNAMIC ARRAY MANAGEMENT
+════════════════════════════════════════ */
+const ARR_TEMPLATES = {
+  experience: {role:"New Role", company:"Company", period:"Date Range", desc:"Description", accent:"#a78bfa"},
+  projects:   {name:"New Project", color:"#a78bfa", stars:0, desc:"Project description", tags:"Tag1,Tag2"},
+  education:  {icon:"🎓", school:"School Name", degree:"Degree", year:"Year", bg:"#0d1a30"},
+  tools:      {name:"New Skill", color:"#a78bfa", bg:"#1a1035", i:"?"}
+};
+
+function syncFromInputs() {
+  if (!portData || !editMode) return;
+  (portData.experience||[]).forEach((ex,i) => {
+    ex.role    = g(`e-exp-role-${i}`)   || ex.role;
+    ex.company = g(`e-exp-co-${i}`)     || ex.company;
+    ex.period  = g(`e-exp-per-${i}`)    || ex.period;
+    ex.desc    = g(`e-exp-desc-${i}`)   || ex.desc;
+    ex.accent  = g(`e-exp-accent-${i}`) || ex.accent;
+  });
+  (portData.projects||[]).forEach((p,i) => {
+    p.name  = g(`e-proj-name-${i}`)  || p.name;
+    p.desc  = g(`e-proj-desc-${i}`)  || p.desc;
+    p.tags  = g(`e-proj-tags-${i}`)  || p.tags;
+    p.stars = parseInt(g(`e-proj-stars-${i}`)) || p.stars;
+    p.color = g(`e-proj-color-${i}`) || p.color;
+  });
+  (portData.education||[]).forEach((e,i) => {
+    e.icon   = g(`e-edu-icon-${i}`)   || e.icon;
+    e.school = g(`e-edu-school-${i}`) || e.school;
+    e.degree = g(`e-edu-deg-${i}`)    || e.degree;
+    e.year   = g(`e-edu-year-${i}`)   || e.year;
+  });
+  (portData.tools||[]).forEach((t,i) => {
+    t.name  = g(`e-tool-name-${i}`)  || t.name;
+    t.i     = g(`e-tool-i-${i}`)     || t.i;
+    t.color = g(`e-tool-color-${i}`) || t.color;
+  });
+}
+
+function addArr(key) {
+  syncFromInputs();
+  if (!portData[key]) portData[key] = [];
+  portData[key].push({...ARR_TEMPLATES[key]});
+  render();
+}
+
+function delArr(key, idx) {
+  syncFromInputs();
+  if (!portData[key]) return;
+  portData[key].splice(idx, 1);
+  render();
 }
 </script>
 </body>
