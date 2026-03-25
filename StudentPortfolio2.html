@@ -1831,7 +1831,12 @@
         portData.hero.liveUrl = liveHeroInput ? formatUrl(liveHeroInput) : (portData.hero.liveUrl || "#");
 
         portData.avatar.initials = g("e-av-init");
-        portData.avatar.photoURL = g("e-av-photo") || portData.avatar.photoURL || "";
+        const photoInput = g("e-av-photo");
+        const photoNormalized = photoInput ? normalizeGithubRawImageUrl(photoInput) : "";
+        // Per requirements: empty/invalid URL should not overwrite the existing photo.
+        if (photoNormalized && isValidImageUrl(photoNormalized)) {
+          portData.avatar.photoURL = photoNormalized;
+        }
         portData.avatar.name = g("e-av-name");
         portData.avatar.role = g("e-av-role");
         portData.avatar.location = g("e-av-loc");
@@ -1942,6 +1947,52 @@
       return "#";
     }
 
+    /* ── profile photo URL helpers ── */
+    function normalizeGithubRawImageUrl(url) {
+      const s = String(url || "").trim();
+      if (!s) return "";
+
+      // Already a raw GitHub URL (keep as-is).
+      if (s.includes("raw.githubusercontent.com/")) return s;
+
+      // Convert github.com/.../blob/... to raw.githubusercontent.com/... (best-effort).
+      try {
+        const u = new URL(s);
+        if (u.hostname !== "github.com") return s;
+        if (!u.pathname.includes("/blob/")) return s;
+
+        // Path format: /{owner}/{repo}/blob/{branch}/{path...}
+        const parts = u.pathname.split("/").filter(Boolean);
+        const owner = parts[0];
+        const repo = parts[1];
+        const blobIdx = parts.indexOf("blob");
+        if (!owner || !repo || blobIdx === -1 || blobIdx + 2 > parts.length) return s;
+
+        const branch = parts[blobIdx + 1];
+        const filePath = parts.slice(blobIdx + 2).join("/");
+        if (!branch || !filePath) return s;
+
+        return `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+      } catch (e) {
+        return s;
+      }
+    }
+
+    function isValidImageUrl(url) {
+      const s = String(url || "").trim();
+      if (!s) return false;
+      try {
+        const u = new URL(s);
+        if (u.protocol !== "http:" && u.protocol !== "https:") return false;
+
+        // Basic "looks like an image URL" check (keeps us from probing garbage).
+        // Note: some CDNs may serve images without extensions, but this is intentionally basic.
+        return /\.(jpe?g|png|gif|webp|svg|bmp|tiff?)$/i.test(u.pathname);
+      } catch (e) {
+        return false;
+      }
+    }
+
     /* ════════════════════════════════════════
        RENDER
     ════════════════════════════════════════ */
@@ -1992,14 +2043,15 @@
       };
 
       input.addEventListener("input", () => {
-        const url = (input.value || "").trim();
+        const rawUrl = (input.value || "").trim();
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-          // Clearing should remove the preview and persist immediately.
-          if (!url) {
-            portData.avatar.photoURL = "";
-            applyAvatarPhotoToDom("");
-            db.ref("portfolio/avatar/photoURL").set("").catch(() => {});
+          // Per requirements: empty/invalid URL should not update the image.
+          if (!rawUrl) return;
+
+          const normalizedUrl = normalizeGithubRawImageUrl(rawUrl);
+          if (!normalizedUrl || !isValidImageUrl(normalizedUrl)) {
+            toast("Invalid image URL. Photo not saved.", "error");
             return;
           }
 
@@ -2007,10 +2059,11 @@
           const probe = new Image();
           probe.onload = async () => {
             if (token !== probeToken) return; // stale probe
-            portData.avatar.photoURL = url;
-            applyAvatarPhotoToDom(url);
+            if (!portData?.avatar) return;
+            portData.avatar.photoURL = normalizedUrl;
+            applyAvatarPhotoToDom(normalizedUrl);
             try {
-              await db.ref("portfolio/avatar/photoURL").set(url);
+              await db.ref("portfolio/avatar/photoURL").set(normalizedUrl);
               toast("✓ Profile photo updated!", "success");
             } catch (e) {
               toast("Photo auto-save failed: " + e.message, "error");
@@ -2020,7 +2073,7 @@
             if (token !== probeToken) return;
             toast("Invalid image URL. Photo not saved.", "error");
           };
-          probe.src = url;
+          probe.src = normalizedUrl;
         }, 500);
       });
     }
