@@ -69,6 +69,14 @@
       font-weight: 800;
       color: #f5f5f5;
       margin: 0 auto 1.25rem;
+      overflow: hidden;
+    }
+
+    .login-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
     }
 
     .login-title {
@@ -289,69 +297,26 @@
       box-shadow: 0 0 0 1px #a78bfa1a;
     }
 
-    .c-hero {
-      grid-column: span 7;
-      min-height: 230px;
-    }
+    .c-hero     { grid-column: span 7; min-height: 230px; }
+    .c-avatar   { grid-column: span 5; min-height: 230px; }
+    .c-stats    { grid-column: span 4; }
+    .c-tools    { grid-column: span 8; }
+    .c-exp      { grid-column: span 12; }
+    .c-projects { grid-column: span 7; }
+    .c-contact  { grid-column: span 5; }
+    .c-reviews  { grid-column: span 12; }
 
-    .c-avatar {
-      grid-column: span 5;
-      min-height: 230px;
-    }
-
-    .c-stats {
-      grid-column: span 4;
-    }
-
-    .c-tools {
-      grid-column: span 8;
-    }
-
-    .c-exp {
-      grid-column: span 12;
-    }
-
-    .c-projects {
-      grid-column: span 7;
-    }
-
-    .c-contact {
-      grid-column: span 5;
-    }
-
-    .card:nth-child(1) {
-      animation-delay: 0ms
-    }
-
-    .card:nth-child(2) {
-      animation-delay: 70ms
-    }
-
-    .card:nth-child(3) {
-      animation-delay: 140ms
-    }
-
-    .card:nth-child(4) {
-      animation-delay: 210ms
-    }
-
-    .card:nth-child(5) {
-      animation-delay: 280ms
-    }
-
-    .card:nth-child(6) {
-      animation-delay: 350ms
-    }
-
-    .card:nth-child(7) {
-      animation-delay: 420ms
-    }
+    .card:nth-child(1)  { animation-delay: 0ms   }
+    .card:nth-child(2)  { animation-delay: 70ms  }
+    .card:nth-child(3)  { animation-delay: 140ms }
+    .card:nth-child(4)  { animation-delay: 210ms }
+    .card:nth-child(5)  { animation-delay: 280ms }
+    .card:nth-child(6)  { animation-delay: 350ms }
+    .card:nth-child(7)  { animation-delay: 420ms }
+    .card:nth-child(8)  { animation-delay: 490ms }
 
     @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0)
-      }
+      to { opacity: 1; transform: translateY(0) }
     }
 
     .glow {
@@ -410,15 +375,8 @@
     }
 
     @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1
-      }
-
-      50% {
-        opacity: .4
-      }
+      0%, 100% { opacity: 1  }
+      50%       { opacity: .4 }
     }
 
     /* ── hero ── */
@@ -472,6 +430,8 @@
       flex-wrap: wrap;
     }
 
+    /* ══ CLICK ANIMATIONS (Feature 3) ══ */
+    /* btn-p: white button — glow on active */
     .btn-p {
       display: inline-flex;
       align-items: center;
@@ -485,7 +445,7 @@
       border: none;
       cursor: pointer;
       text-decoration: none;
-      transition: background .2s, transform .15s;
+      transition: background .2s, transform .15s, box-shadow .15s;
     }
 
     .btn-p:hover {
@@ -493,6 +453,20 @@
       transform: scale(1.03);
     }
 
+    .btn-p:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 18px 4px #f5f5f566, 0 0 6px 1px #ffffff88;
+      background: #ffffff;
+      animation: pop-white .35s ease forwards;
+    }
+
+    @keyframes pop-white {
+      0%   { box-shadow: 0 0 18px 4px #f5f5f566; }
+      60%  { box-shadow: 0 0 28px 8px #f5f5f533; }
+      100% { box-shadow: 0 0 0px 0px transparent; }
+    }
+
+    /* btn-gh: ghost button — violet glow on active */
     .btn-gh {
       display: inline-flex;
       align-items: center;
@@ -506,13 +480,114 @@
       border: 1px solid #2a2a2a;
       cursor: pointer;
       text-decoration: none;
-      transition: border-color .2s, color .2s, transform .15s;
+      transition: border-color .2s, color .2s, transform .15s, box-shadow .15s;
     }
 
     .btn-gh:hover {
       border-color: #444;
       color: #e0e0e0;
       transform: scale(1.03);
+    }
+
+    .btn-gh:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 18px 4px #a78bfa55, 0 0 6px 1px #a78bfa44;
+      border-color: #a78bfa88;
+      animation: pop-violet .35s ease forwards;
+    }
+
+    @keyframes pop-violet {
+      0%   { box-shadow: 0 0 18px 4px #a78bfa55; }
+      60%  { box-shadow: 0 0 28px 8px #a78bfa33; }
+      100% { box-shadow: 0 0 0px 0px transparent; }
+    }
+
+    /* soc-btn: social icon — green glow on active */
+    .soc-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #1a1a1a;
+      border: 1px solid #252525;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s, color .2s, border-color .2s, transform .15s, box-shadow .15s;
+    }
+
+    .soc-btn:hover {
+      background: #242424;
+      color: #e0e0e0;
+      border-color: #333;
+    }
+
+    .soc-btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 0 14px 4px #34d39944;
+      border-color: #34d39966;
+      animation: pop-green .35s ease forwards;
+    }
+
+    @keyframes pop-green {
+      0%   { box-shadow: 0 0 14px 4px #34d39944; }
+      60%  { box-shadow: 0 0 22px 6px #34d39922; }
+      100% { box-shadow: 0 0 0px 0px transparent; }
+    }
+
+    .soc-btn svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* clink: contact row link — cyan glow on active */
+    .clink {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .65rem .9rem;
+      background: #141414;
+      border: 1px solid #1e1e1e;
+      border-radius: 12px;
+      color: #aaa;
+      font-size: .78rem;
+      text-decoration: none;
+      margin-bottom: .5rem;
+      transition: border-color .2s, color .2s, background .2s, transform .15s, box-shadow .15s;
+    }
+
+    .clink:hover {
+      border-color: #2e2e2e;
+      color: #e0e0e0;
+      background: #181818;
+    }
+
+    .clink:active {
+      transform: scale(0.97);
+      box-shadow: 0 0 14px 4px #38bdf844;
+      border-color: #38bdf866;
+      animation: pop-cyan .35s ease forwards;
+    }
+
+    @keyframes pop-cyan {
+      0%   { box-shadow: 0 0 14px 4px #38bdf844; }
+      60%  { box-shadow: 0 0 22px 6px #38bdf822; }
+      100% { box-shadow: 0 0 0px 0px transparent; }
+    }
+
+    .clink-val {
+      margin-left: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: #444;
+    }
+
+    .clink svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
     }
 
     /* ── avatar ── */
@@ -532,6 +607,16 @@
       margin-bottom: 1rem;
       position: relative;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* Feature 2: Profile picture image inside av-ring */
+    .av-ring img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
     }
 
     .av-online {
@@ -544,6 +629,7 @@
       background: #34d399;
       border: 2px solid #111;
       box-shadow: 0 0 6px #34d39988;
+      z-index: 2;
     }
 
     .av-name {
@@ -573,31 +659,6 @@
       display: flex;
       gap: .5rem;
       margin-top: 1rem;
-    }
-
-    .soc-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #1a1a1a;
-      border: 1px solid #252525;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-      cursor: pointer;
-      transition: background .2s, color .2s, border-color .2s;
-    }
-
-    .soc-btn:hover {
-      background: #242424;
-      color: #e0e0e0;
-      border-color: #333;
-    }
-
-    .soc-btn svg {
-      width: 15px;
-      height: 15px;
     }
 
     /* ── stats ── */
@@ -880,41 +941,6 @@
       margin-top: .2rem;
     }
 
-    /* ── contact ── */
-    .clink {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .65rem .9rem;
-      background: #141414;
-      border: 1px solid #1e1e1e;
-      border-radius: 12px;
-      color: #aaa;
-      font-size: .78rem;
-      text-decoration: none;
-      margin-bottom: .5rem;
-      transition: border-color .2s, color .2s, background .2s;
-    }
-
-    .clink:hover {
-      border-color: #2e2e2e;
-      color: #e0e0e0;
-      background: #181818;
-    }
-
-    .clink-val {
-      margin-left: auto;
-      font-family: 'DM Mono', monospace;
-      font-size: .65rem;
-      color: #444;
-    }
-
-    .clink svg {
-      width: 13px;
-      height: 13px;
-      flex-shrink: 0;
-    }
-
     /* ── edit fields ── */
     .ef {
       background: #0d0d0d;
@@ -1067,16 +1093,271 @@
       color: #a78bfa;
     }
 
+    /* ══ REVIEWS SECTION (Feature 4 & 5) ══ */
+    .reviews-compose {
+      background: #141414;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .reviews-compose-top {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .75rem;
+    }
+
+    .rev-user-img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid #2a2a2a;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .rev-user-name {
+      font-size: .8rem;
+      color: #bbb;
+      font-weight: 500;
+    }
+
+    .rev-textarea {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: .6rem .75rem;
+      color: #e0e0e0;
+      font-family: 'Geist', sans-serif;
+      font-size: .82rem;
+      resize: none;
+      outline: none;
+      min-height: 64px;
+      line-height: 1.6;
+      transition: border-color .2s;
+    }
+
+    .rev-textarea:focus {
+      border-color: #a78bfa55;
+    }
+
+    .rev-submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: .6rem;
+    }
+
+    .rev-submit-btn {
+      padding: .45rem 1rem;
+      background: #1a1a2e;
+      color: #a78bfa;
+      border: 1px solid #a78bfa33;
+      border-radius: 8px;
+      font-size: .78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, box-shadow .15s, transform .15s;
+    }
+
+    .rev-submit-btn:hover {
+      background: #252540;
+    }
+
+    .rev-submit-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 14px 4px #a78bfa44;
+      animation: pop-violet .35s ease forwards;
+    }
+
+    .rev-list {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .rev-item {
+      background: #141414;
+      border: 1px solid #1e1e1e;
+      border-radius: 14px;
+      padding: 1rem;
+      transition: border-color .2s;
+    }
+
+    .rev-item:hover {
+      border-color: #2a2a2a;
+    }
+
+    .rev-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .55rem;
+    }
+
+    .rev-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid #2a2a2a;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #1e1e1e;
+    }
+
+    .rev-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rev-author {
+      font-size: .82rem;
+      font-weight: 600;
+      color: #d0d0d0;
+    }
+
+    .rev-time {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: #444;
+      margin-top: .1rem;
+    }
+
+    .rev-admin-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: .58rem;
+      padding: .12rem .45rem;
+      background: #0d2015;
+      border: 1px solid #34d39922;
+      color: #34d399;
+      border-radius: 99px;
+    }
+
+    .rev-text {
+      font-size: .82rem;
+      color: #888;
+      line-height: 1.65;
+    }
+
+    .rev-actions {
+      display: flex;
+      gap: .5rem;
+      margin-top: .75rem;
+    }
+
+    .rev-action-btn {
+      padding: .3rem .7rem;
+      border-radius: 7px;
+      font-size: .7rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+
+    .rev-delete-btn {
+      background: #200a0a;
+      color: #f87171;
+      border: 1px solid #f8717133;
+    }
+
+    .rev-delete-btn:hover {
+      background: #2e1010;
+      border-color: #f8717166;
+    }
+
+    .rev-reply-btn {
+      background: #1a1a2e;
+      color: #a78bfa;
+      border: 1px solid #a78bfa33;
+    }
+
+    .rev-reply-btn:hover {
+      background: #252540;
+    }
+
+    .rev-reply-box {
+      margin-top: .75rem;
+      display: none;
+    }
+
+    .rev-reply-box.open {
+      display: block;
+    }
+
+    .rev-reply-textarea {
+      width: 100%;
+      background: #0d0d0d;
+      border: 1px solid #a78bfa33;
+      border-radius: 8px;
+      padding: .5rem .65rem;
+      color: #e0e0e0;
+      font-family: 'Geist', sans-serif;
+      font-size: .78rem;
+      resize: none;
+      outline: none;
+      min-height: 52px;
+      line-height: 1.6;
+      transition: border-color .2s;
+    }
+
+    .rev-reply-textarea:focus {
+      border-color: #a78bfa55;
+    }
+
+    .rev-reply-submit {
+      margin-top: .45rem;
+      padding: .35rem .75rem;
+      background: #0d2015;
+      color: #34d399;
+      border: 1px solid #34d39933;
+      border-radius: 7px;
+      font-size: .72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .rev-reply-submit:hover {
+      background: #142b1f;
+    }
+
+    /* nested admin reply */
+    .rev-admin-reply {
+      margin-top: .75rem;
+      padding: .65rem .85rem;
+      background: #0d1a10;
+      border-left: 2px solid #34d39955;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .rev-admin-reply-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: #34d399;
+      margin-bottom: .3rem;
+    }
+
+    .rev-admin-reply-text {
+      font-size: .8rem;
+      color: #7dbf9c;
+      line-height: 1.6;
+    }
+
+    .rev-empty {
+      font-family: 'DM Mono', monospace;
+      font-size: .72rem;
+      color: #333;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
     /* ── responsive ── */
     @media(max-width:768px) {
-
-      .c-hero,
-      .c-avatar,
-      .c-stats,
-      .c-tools,
-      .c-exp,
-      .c-projects,
-      .c-contact {
+      .c-hero, .c-avatar, .c-stats, .c-tools,
+      .c-exp, .c-projects, .c-contact, .c-reviews {
         grid-column: span 12;
       }
     }
@@ -1088,7 +1369,7 @@
   <!-- ═══════ LOGIN ═══════ -->
   <div id="login-screen">
     <div class="login-box">
-      <div class="login-logo">RS</div>
+      <div class="login-logo" id="login-logo-wrap">RS</div>
       <div class="login-title">Portfolio Access</div>
       <p class="login-sub">Sign in with Google to view this portfolio.<br />Admin editing is reserved for the portfolio
         owner.</p>
@@ -1136,15 +1417,14 @@
               </svg>
               Download CV
             </a>
-            <a href="#" class="btn-gh">
+            <a id="c-link-github" href="#" class="btn-gh">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="4 17 10 11 4 5" />
-                <line x1="12" y1="19" x2="20" y2="19" />
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
               View GitHub
             </a>
-            <a href="#" class="btn-gh">
+            <a id="c-link-live" href="#" class="btn-gh">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
@@ -1159,7 +1439,9 @@
         <!-- AVATAR -->
         <div class="card c-avatar">
           <div class="glow" style="background:#34d399;bottom:-30px;left:-20px"></div>
-          <div class="av-ring"><span id="c-av-init"></span>
+          <!-- Feature 2: av-ring now holds img tag, initials shown as fallback text -->
+          <div class="av-ring" id="c-av-ring">
+            <span id="c-av-init"></span>
             <div class="av-online"></div>
           </div>
           <div class="av-name" id="c-av-name"></div>
@@ -1191,22 +1473,27 @@
             <span id="c-av-status"></span>
           </div>
           <div class="soc-row">
-            <div class="soc-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            <a id="soc-gh" class="soc-btn" href="#" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path
-                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-              </svg></div>
-            <div class="soc-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+              </svg>
+            </a>
+            <a id="soc-li" class="soc-btn" href="#" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
                 <rect x="2" y="9" width="4" height="12" />
                 <circle cx="4" cy="4" r="2" />
-              </svg></div>
-            <div class="soc-btn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+              </svg>
+            </a>
+            <a id="soc-em" class="soc-btn" href="#" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
-              </svg></div>
+              </svg>
+            </a>
           </div>
         </div>
 
@@ -1286,7 +1573,7 @@
               </svg>
               <span id="c-av-email"></span><span class="clink-val">email ↗</span>
             </a>
-            <a class="clink" href="#">
+            <a class="clink" id="c-link-linkedin" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -1295,37 +1582,52 @@
               </svg>
               <span id="c-av-linkedin"></span><span class="clink-val">linkedin ↗</span>
             </a>
-            <a class="clink" href="#">
+            <a class="clink" id="c-link-githubcontact" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path
-                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
               <span id="c-av-github"></span><span class="clink-val">github ↗</span>
             </a>
           </div>
         </div>
 
+        <!-- REVIEWS (Feature 4 & 5) -->
+        <div class="card c-reviews">
+          <div class="glow" style="background:#a78bfa;bottom:-30px;right:-30px"></div>
+          <div class="sec">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#444"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Reviews &amp; Comments
+          </div>
+          <!-- Compose box — rendered by JS -->
+          <div id="rev-compose-wrap"></div>
+          <!-- Reviews list -->
+          <div class="rev-list" id="rev-list"></div>
+        </div>
+
       </div>
     </div>
   </div>
 
-  <!-- ═══════ MAIN SCRIPT (regular — no type=module, so window scope works) ═══════ -->
+  <!-- ═══════ MAIN SCRIPT ═══════ -->
   <script>
     /* ─────────────────────────────────────────────────────────────
        🔧  HOW TO FILL THIS IN:
-    
+
        STEP 1 — Firebase API Key + App details:
          Firebase Console → Project Settings → Your Apps → SDK config
          Copy apiKey, messagingSenderId, appId from there.
-    
+
        STEP 2 — OAuth Client ID (THIS is what fixes the auth error):
          Google Cloud Console (console.cloud.google.com)
          → APIs & Services → Credentials
          → OAuth 2.0 Client IDs → your Web Client
          → Copy the Client ID  (looks like: 123456789-xxxx.apps.googleusercontent.com)
          → Paste it as OAUTH_CLIENT_ID below.
-    
+
        STEP 3 — In Firebase Console:
          → Authentication → Sign-in method → Google → Enable
          → Paste that same OAuth Client ID into "Web SDK configuration"
@@ -1341,10 +1643,6 @@
       measurementId: "G-N4968SE7BC"
     };
 
-    /* 🔑 OAuth Client ID is NOT needed in code — just enable Google Sign-In
-       in Firebase Console → Authentication → Sign-in method → Google,
-       and paste your OAuth Client ID there. Firebase handles it automatically. */
-
     const ADMIN_EMAIL = "ranveer.shinde.work@gmail.com";
 
     /* ── Default seed data ── */
@@ -1354,17 +1652,24 @@
         eyebrow: "AI & Data Science Student",
         subtitle: "Building intelligent systems and data-driven solutions. Passionate about machine learning, AI models, and turning raw data into real-world insights.",
         availability: "Open to Internships · Summer 2025",
-        cvLink: "#"
+        cvLink: "#",
+        githubUrl: "https://github.com/ranveershinde",
+        liveUrl: "#"
       },
       avatar: {
-        initials: "RS", name: "Ranveer Shinde",
+        initials: "RS",
+        photoURL: "",
+        name: "Ranveer Shinde",
         role: "AI & Data Science Student",
         location: "Aurangabad, Maharashtra, IN",
         gpa: "Pursuing B.Tech · AI & DS",
         status: "Available for remote work",
         email: "ranveer.shinde.work@gmail.com",
+        emailUrl: "mailto:ranveer.shinde.work@gmail.com",
         linkedin: "/in/ranveershinde",
-        github: "@ranveershinde"
+        linkedinUrl: "https://linkedin.com/in/ranveershinde",
+        github: "@ranveershinde",
+        githubUrl: "https://github.com/ranveershinde"
       },
       stats: {
         s1_val: "10+", s1_lbl: "projects built",
@@ -1396,15 +1701,13 @@
       ]
     };
 
-    /* Tools are now in DEFAULT.tools and stored in Firebase */
-
     /* ════════════════════════════════════════
        STATE
     ════════════════════════════════════════ */
     let db, auth, isAdmin = false, editMode = false, portData = null, openExp = null, portDataBackup = null;
 
     /* ════════════════════════════════════════
-       FIREBASE INIT  (compat API — global scope)
+       FIREBASE INIT
     ════════════════════════════════════════ */
     firebase.initializeApp(firebaseConfig);
     auth = firebase.auth();
@@ -1432,6 +1735,10 @@
           portData = snap.val() || DEFAULT;
           render();
           renderBar(user);
+        });
+        // Listen for reviews live
+        db.ref("reviews").on("value", snap => {
+          renderReviews(snap.val());
         });
       } else {
         isAdmin = false; editMode = false;
@@ -1506,16 +1813,22 @@
         portData.hero.highlight = g("e-herohl");
         portData.hero.subtitle = g("e-herosub");
         portData.hero.cvLink = g("e-cvlink") || portData.hero.cvLink || "#";
+        portData.hero.githubUrl = g("e-githuburl") || portData.hero.githubUrl || "#";
+        portData.hero.liveUrl = g("e-liveurl") || portData.hero.liveUrl || "#";
 
         portData.avatar.initials = g("e-av-init");
+        portData.avatar.photoURL = g("e-av-photo") || portData.avatar.photoURL || "";
         portData.avatar.name = g("e-av-name");
         portData.avatar.role = g("e-av-role");
         portData.avatar.location = g("e-av-loc");
         portData.avatar.gpa = g("e-av-gpa");
         portData.avatar.status = g("e-av-status");
         portData.avatar.email = g("e-av-email");
+        portData.avatar.emailUrl = g("e-av-emailurl") || ("mailto:" + g("e-av-email"));
         portData.avatar.linkedin = g("e-av-linkedin");
+        portData.avatar.linkedinUrl = g("e-av-linkedinurl") || portData.avatar.linkedinUrl || "#";
         portData.avatar.github = g("e-av-github");
+        portData.avatar.githubUrl = g("e-av-githuburl") || portData.avatar.githubUrl || "#";
 
         ["s1", "s2", "s3", "s4"].forEach(k => {
           portData.stats[k + "_val"] = g("e-" + k + "-val");
@@ -1588,14 +1901,30 @@
       // CV link
       const cvEl = document.getElementById("c-link-cv");
       if (cvEl) cvEl.href = portData.hero.cvLink || "#";
+
+      // GitHub hero button
+      const ghEl = document.getElementById("c-link-github");
+      if (ghEl) ghEl.href = portData.hero.githubUrl || "#";
+
+      // Live projects button
+      const liveEl = document.getElementById("c-link-live");
+      if (liveEl) liveEl.href = portData.hero.liveUrl || "#";
+
       if (E) {
-        // inject CV link edit field below the subtitle
-        const cvEdit = document.getElementById("c-cv-edit");
-        if (!cvEdit) {
+        // inject CV / GitHub / Live URL edit fields below the subtitle
+        const existEdit = document.getElementById("c-cv-edit");
+        if (!existEdit) {
           const wrap = document.createElement("div");
           wrap.id = "c-cv-edit";
           wrap.style.marginBottom = ".75rem";
-          wrap.innerHTML = `<div class="ef-hint">CV / Resume URL:</div><input class="ef ef-sm" id="e-cvlink" value="${x(portData.hero.cvLink || '')}"/>`;
+          wrap.innerHTML = `
+            <div class="ef-hint">CV / Resume URL:</div>
+            <input class="ef ef-sm" id="e-cvlink" value="${x(portData.hero.cvLink || '')}"/>
+            <div class="ef-hint">GitHub Profile URL (hero button):</div>
+            <input class="ef ef-sm" id="e-githuburl" value="${x(portData.hero.githubUrl || '')}"/>
+            <div class="ef-hint">Live Projects URL (hero button):</div>
+            <input class="ef ef-sm" id="e-liveurl" value="${x(portData.hero.liveUrl || '')}"/>
+          `;
           document.getElementById("c-herosub")?.after(wrap);
         }
       } else {
@@ -1612,8 +1941,44 @@
         s("c-heroname", portData.hero.name.replace(hl, `<span>${hl}</span>`));
       }
 
-      /* ── avatar ── */
-      s("c-av-init", fi("e-av-init", portData.avatar.initials, "ef-bigname"));
+      /* ── avatar photo (Feature 2) ── */
+      const ringEl = document.getElementById("c-av-ring");
+      if (ringEl) {
+        const photoURL = portData.avatar.photoURL || "";
+        // Keep the .av-online dot
+        const onlineDot = ringEl.querySelector(".av-online");
+        ringEl.innerHTML = "";
+        if (photoURL) {
+          const img = document.createElement("img");
+          img.src = photoURL;
+          img.alt = portData.avatar.name || "Profile";
+          img.onerror = function () {
+            this.style.display = "none";
+            const span = document.createElement("span");
+            span.id = "c-av-init";
+            span.textContent = portData.avatar.initials || "RS";
+            ringEl.insertBefore(span, ringEl.firstChild);
+          };
+          ringEl.appendChild(img);
+        } else {
+          const span = document.createElement("span");
+          span.id = "c-av-init";
+          span.textContent = "";
+          ringEl.appendChild(span);
+          s("c-av-init", fi("e-av-init", portData.avatar.initials, "ef-bigname"));
+        }
+        if (onlineDot) ringEl.appendChild(onlineDot); else {
+          const d = document.createElement("div");
+          d.className = "av-online";
+          ringEl.appendChild(d);
+        }
+        // Also update the login logo
+        const loginLogo = document.getElementById("login-logo-wrap");
+        if (loginLogo && photoURL) {
+          loginLogo.innerHTML = `<img src="${photoURL}" alt="RS" onerror="this.parentElement.textContent='RS'"/>`;
+        }
+      }
+
       s("c-av-name", fi("e-av-name", portData.avatar.name));
       s("c-av-role", fi("e-av-role", portData.avatar.role, "ef-sm"));
       s("c-av-loc", fi("e-av-loc", portData.avatar.location, "ef-sm"));
@@ -1622,8 +1987,48 @@
       s("c-av-email", fi("e-av-email", portData.avatar.email, "ef-sm"));
       s("c-av-linkedin", fi("e-av-linkedin", portData.avatar.linkedin, "ef-sm"));
       s("c-av-github", fi("e-av-github", portData.avatar.github, "ef-sm"));
-      const el = document.getElementById("c-link-email");
-      if (el && !E) el.href = "mailto:" + portData.avatar.email;
+
+      // Inject avatar URL edit fields
+      if (E) {
+        const existAv = document.getElementById("c-av-url-edit");
+        if (!existAv) {
+          const wrap = document.createElement("div");
+          wrap.id = "c-av-url-edit";
+          wrap.style.marginTop = ".5rem";
+          wrap.innerHTML = `
+            <div class="ef-hint">Profile Photo URL:</div>
+            <input class="ef ef-sm" id="e-av-photo" value="${x(portData.avatar.photoURL || '')}"/>
+            <div class="ef-hint">Email URL (mailto:...):</div>
+            <input class="ef ef-sm" id="e-av-emailurl" value="${x(portData.avatar.emailUrl || '')}"/>
+            <div class="ef-hint">LinkedIn URL:</div>
+            <input class="ef ef-sm" id="e-av-linkedinurl" value="${x(portData.avatar.linkedinUrl || '')}"/>
+            <div class="ef-hint">GitHub URL (avatar card):</div>
+            <input class="ef ef-sm" id="e-av-githuburl" value="${x(portData.avatar.githubUrl || '')}"/>
+          `;
+          // Append after the soc-row
+          document.querySelector(".c-avatar .soc-row")?.after(wrap);
+        }
+      } else {
+        document.getElementById("c-av-url-edit")?.remove();
+      }
+
+      // Bind contact links
+      const emailLink = document.getElementById("c-link-email");
+      if (emailLink) emailLink.href = portData.avatar.emailUrl || ("mailto:" + portData.avatar.email) || "#";
+
+      const liLink = document.getElementById("c-link-linkedin");
+      if (liLink) liLink.href = portData.avatar.linkedinUrl || "#";
+
+      const ghcLink = document.getElementById("c-link-githubcontact");
+      if (ghcLink) ghcLink.href = portData.avatar.githubUrl || "#";
+
+      // Bind social icon buttons
+      const socGh = document.getElementById("soc-gh");
+      if (socGh) socGh.href = portData.avatar.githubUrl || "#";
+      const socLi = document.getElementById("soc-li");
+      if (socLi) socLi.href = portData.avatar.linkedinUrl || "#";
+      const socEm = document.getElementById("soc-em");
+      if (socEm) socEm.href = portData.avatar.emailUrl || ("mailto:" + portData.avatar.email) || "#";
 
       /* ── stats ── */
       ["s1", "s2", "s3", "s4"].forEach(k => {
@@ -1739,6 +2144,134 @@
 
       /* editing border */
       document.querySelectorAll(".card").forEach(c => c.classList.toggle("editing", E));
+
+      /* render compose box for reviews */
+      renderReviewCompose();
+    }
+
+    /* ════════════════════════════════════════
+       REVIEWS (Feature 4 & 5)
+    ════════════════════════════════════════ */
+    function renderReviewCompose() {
+      const user = auth.currentUser;
+      if (!user) return;
+      const wrap = document.getElementById("rev-compose-wrap");
+      if (!wrap) return;
+      wrap.innerHTML = `
+        <div class="reviews-compose">
+          <div class="reviews-compose-top">
+            <img src="${x(user.photoURL || '')}" class="rev-user-img" onerror="this.src=''" alt=""/>
+            <span class="rev-user-name">${x(user.displayName || user.email)}</span>
+          </div>
+          <textarea class="rev-textarea" id="rev-input" placeholder="Share your thoughts about this portfolio…" rows="3"></textarea>
+          <div class="rev-submit-row">
+            <button class="rev-submit-btn" id="rev-submit-btn">Post Comment</button>
+          </div>
+        </div>
+      `;
+      document.getElementById("rev-submit-btn")?.addEventListener("click", submitReview);
+    }
+
+    async function submitReview() {
+      const user = auth.currentUser;
+      if (!user) return;
+      const text = (document.getElementById("rev-input")?.value || "").trim();
+      if (!text) { toast("Please write something before posting.", "info"); return; }
+      try {
+        const newRef = db.ref("reviews").push();
+        await newRef.set({
+          uid: user.uid,
+          author: user.displayName || user.email,
+          photoURL: user.photoURL || "",
+          text: text,
+          timestamp: Date.now(),
+          reply: null
+        });
+        document.getElementById("rev-input").value = "";
+        toast("✓ Comment posted!", "success");
+      } catch (e) {
+        toast("Failed to post: " + e.message, "error");
+      }
+    }
+
+    function renderReviews(data) {
+      const list = document.getElementById("rev-list");
+      if (!list) return;
+      if (!data) {
+        list.innerHTML = `<div class="rev-empty">// no comments yet — be the first to leave one</div>`;
+        return;
+      }
+      const entries = Object.entries(data).sort((a, b) => b[1].timestamp - a[1].timestamp);
+      list.innerHTML = "";
+      entries.forEach(([key, rev]) => {
+        const item = document.createElement("div");
+        item.className = "rev-item";
+        const timeStr = rev.timestamp ? new Date(rev.timestamp).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }) : "";
+        item.innerHTML = `
+          <div class="rev-header">
+            <img src="${x(rev.photoURL || '')}" class="rev-avatar" onerror="this.src=''" alt=""/>
+            <div class="rev-meta">
+              <div class="rev-author">${x(rev.author || "Anonymous")}</div>
+              <div class="rev-time">${timeStr}</div>
+            </div>
+          </div>
+          <div class="rev-text">${x(rev.text || "")}</div>
+          ${rev.reply ? `
+            <div class="rev-admin-reply">
+              <div class="rev-admin-reply-label">⚡ Admin Reply</div>
+              <div class="rev-admin-reply-text">${x(rev.reply)}</div>
+            </div>
+          ` : ""}
+          ${isAdmin ? `
+            <div class="rev-actions">
+              <button class="rev-action-btn rev-delete-btn" data-key="${key}">🗑 Delete</button>
+              <button class="rev-action-btn rev-reply-btn" data-key="${key}">↩ Reply</button>
+            </div>
+            <div class="rev-reply-box" id="reply-box-${key}">
+              <textarea class="rev-reply-textarea" id="reply-ta-${key}" placeholder="Write a reply…" rows="2">${x(rev.reply || '')}</textarea>
+              <button class="rev-reply-submit" data-key="${key}">Post Reply</button>
+            </div>
+          ` : ""}
+        `;
+        list.appendChild(item);
+      });
+
+      // Attach admin event listeners
+      if (isAdmin) {
+        list.querySelectorAll(".rev-delete-btn").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const key = btn.dataset.key;
+            if (!window.confirm("Delete this comment?")) return;
+            try {
+              await db.ref("reviews/" + key).remove();
+              toast("✓ Comment deleted.", "success");
+            } catch (e) { toast("Delete failed: " + e.message, "error"); }
+          });
+        });
+
+        list.querySelectorAll(".rev-reply-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const key = btn.dataset.key;
+            const box = document.getElementById("reply-box-" + key);
+            if (box) box.classList.toggle("open");
+          });
+        });
+
+        list.querySelectorAll(".rev-reply-submit").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            const key = btn.dataset.key;
+            const ta = document.getElementById("reply-ta-" + key);
+            const replyText = (ta?.value || "").trim();
+            if (!replyText) { toast("Reply cannot be empty.", "info"); return; }
+            try {
+              await db.ref("reviews/" + key + "/reply").set(replyText);
+              toast("✓ Reply posted!", "success");
+              const box = document.getElementById("reply-box-" + key);
+              if (box) box.classList.remove("open");
+            } catch (e) { toast("Reply failed: " + e.message, "error"); }
+          });
+        });
+      }
     }
 
     /* ════════════════════════════════════════
