@@ -619,6 +619,61 @@
       display: block;
     }
 
+    /* Avatar picture + placeholder positioning helpers (used by #profile-pic) */
+    .absolute {
+      position: absolute;
+    }
+
+    .inset-0 {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    .w-full {
+      width: 100%;
+    }
+
+    .h-full {
+      height: 100%;
+    }
+
+    .object-cover {
+      object-fit: cover;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    #profile-pic {
+      display: none; /* toggled by JS */
+      z-index: 1;
+    }
+
+    .profile-placeholder {
+      position: absolute;
+      inset: 0;
+      display: none; /* toggled by JS */
+      align-items: center;
+      justify-content: center;
+      z-index: 0;
+      color: #666;
+      pointer-events: none;
+    }
+
+    #c-av-init {
+      position: absolute;
+      inset: 0;
+      display: none; /* toggled by JS in edit mode */
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      padding: 0 10px;
+      pointer-events: auto; /* allow admin input interaction */
+    }
+
     .av-online {
       position: absolute;
       bottom: 4px;
@@ -1408,30 +1463,31 @@
           <h1 class="heroname" id="c-heroname"></h1>
           <div class="herosub" id="c-herosub"></div>
           <div class="actions">
-            <a id="c-link-cv" href="#" class="btn-p">
+            <a id="link-linkedin" href="#" class="btn-gh" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
               </svg>
-              Download CV
+              LinkedIn ↗
             </a>
-            <a id="c-link-github" href="#" class="btn-gh">
+
+            <a id="link-github" href="#" class="btn-gh" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
               </svg>
-              View GitHub
+              GitHub ↗
             </a>
-            <a id="c-link-live" href="#" class="btn-gh">
+
+            <a id="link-email" href="#" class="btn-p">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="2" y1="12" x2="22" y2="12" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
               </svg>
-              Live Projects
+              Email ↗
             </a>
           </div>
         </div>
@@ -1441,6 +1497,14 @@
           <div class="glow" style="background:#34d399;bottom:-30px;left:-20px"></div>
           <!-- Feature 2: av-ring now holds img tag, initials shown as fallback text -->
           <div class="av-ring" id="c-av-ring">
+            <img id="profile-pic" class="absolute inset-0 w-full h-full object-cover rounded-full" alt="" />
+            <div id="profile-placeholder" class="profile-placeholder" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
             <span id="c-av-init"></span>
             <div class="av-online"></div>
           </div>
@@ -1565,7 +1629,7 @@
           <div id="edu-wrap"></div>
           <div style="margin-top:1.3rem">
             <div class="lbl">// let's connect</div>
-            <a class="clink" id="c-link-email" href="#">
+            <a class="clink" id="link-email-contact" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -1573,7 +1637,7 @@
               </svg>
               <span id="c-av-email"></span><span class="clink-val">email ↗</span>
             </a>
-            <a class="clink" id="c-link-linkedin" href="#">
+            <a class="clink" id="link-linkedin-contact" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -1582,7 +1646,7 @@
               </svg>
               <span id="c-av-linkedin"></span><span class="clink-val">linkedin ↗</span>
             </a>
-            <a class="clink" id="c-link-githubcontact" href="#">
+            <a class="clink" id="link-github-contact" href="#">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
@@ -1812,9 +1876,9 @@
         portData.hero.name = g("e-heroname");
         portData.hero.highlight = g("e-herohl");
         portData.hero.subtitle = g("e-herosub");
-        portData.hero.cvLink = g("e-cvlink") || portData.hero.cvLink || "#";
-        portData.hero.githubUrl = g("e-githuburl") || portData.hero.githubUrl || "#";
-        portData.hero.liveUrl = g("e-liveurl") || portData.hero.liveUrl || "#";
+        portData.hero.cvLink = formatUrl(g("e-cvlink")) || portData.hero.cvLink || "#";
+        portData.hero.githubUrl = formatUrl(g("e-githuburl")) || portData.hero.githubUrl || "#";
+        portData.hero.liveUrl = formatUrl(g("e-liveurl")) || portData.hero.liveUrl || "#";
 
         portData.avatar.initials = g("e-av-init");
         portData.avatar.photoURL = g("e-av-photo") || portData.avatar.photoURL || "";
@@ -1824,11 +1888,11 @@
         portData.avatar.gpa = g("e-av-gpa");
         portData.avatar.status = g("e-av-status");
         portData.avatar.email = g("e-av-email");
-        portData.avatar.emailUrl = g("e-av-emailurl") || ("mailto:" + g("e-av-email"));
+        portData.avatar.emailUrl = formatUrl(g("e-av-emailurl")) || ("mailto:" + g("e-av-email"));
         portData.avatar.linkedin = g("e-av-linkedin");
-        portData.avatar.linkedinUrl = g("e-av-linkedinurl") || portData.avatar.linkedinUrl || "#";
+        portData.avatar.linkedinUrl = formatUrl(g("e-av-linkedinurl")) || portData.avatar.linkedinUrl || "#";
         portData.avatar.github = g("e-av-github");
-        portData.avatar.githubUrl = g("e-av-githuburl") || portData.avatar.githubUrl || "#";
+        portData.avatar.githubUrl = formatUrl(g("e-av-githuburl")) || portData.avatar.githubUrl || "#";
 
         ["s1", "s2", "s3", "s4"].forEach(k => {
           portData.stats[k + "_val"] = g("e-" + k + "-val");
@@ -1880,9 +1944,100 @@
       return el ? el.value.trim() : "";
     }
 
+    function formatUrl(url) {
+      if (!url || url === "#") return url;
+      if (url.startsWith("www.")) return "https://" + url;
+      if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("mailto:") && !url.startsWith("/")) {
+        return "https://" + url;
+      }
+      return url;
+    }
+
     /* ════════════════════════════════════════
        RENDER
     ════════════════════════════════════════ */
+    // Binds link HREFs and profile photo from `portData` (Firebase).
+    // Prefers `portData.links.*` when present; falls back to the existing admin fields.
+    function loadData() {
+      if (!portData) return;
+
+      const links = portData.links || {};
+
+      const toMailto = (v) => {
+        const s = String(v || "").trim();
+        if (!s) return "#";
+        if (s.toLowerCase().startsWith("mailto:")) return s;
+        return "mailto:" + s;
+      };
+
+      const normalizeLinkedin = (v) => {
+        const s = String(v || "").trim();
+        if (!s) return "";
+        if (s.startsWith("http://") || s.startsWith("https://")) return s;
+        if (s.startsWith("/in/")) return "https://www.linkedin.com" + s;
+        if (s.startsWith("/")) return "https://www.linkedin.com" + s;
+        if (s.startsWith("in/")) return "https://www.linkedin.com/" + s;
+        return s;
+      };
+
+      const normalizeGithub = (v) => {
+        const s = String(v || "").trim();
+        if (!s) return "";
+        if (s.startsWith("http://") || s.startsWith("https://")) return s;
+        if (s.startsWith("@")) return "https://github.com/" + s.slice(1);
+        if (s.startsWith("/")) return "https://github.com" + s;
+        return s;
+      };
+
+      // Prefer `portData.links.*` if it exists.
+      const linkedinVal = links.linkedin ?? portData.avatar?.linkedinUrl ?? portData.avatar?.linkedin ?? "";
+      const githubVal = links.github ?? portData.links?.github ?? portData.hero?.githubUrl ?? portData.avatar?.githubUrl ?? portData.avatar?.github ?? "";
+      const emailVal = links.email ?? portData.links?.email ?? portData.avatar?.emailUrl ?? portData.avatar?.email ?? "";
+
+      // Bind hero links
+      const heroLinkedinHref = normalizeLinkedin(linkedinVal) || "#";
+      const heroGithubHref = normalizeGithub(githubVal) || "#";
+      const heroEmailHref = toMailto(emailVal);
+
+      const setHref = (id, href) => {
+        const el = document.getElementById(id);
+        if (el) el.href = href || "#";
+      };
+
+      setHref("link-linkedin", heroLinkedinHref);
+      setHref("link-github", heroGithubHref);
+      setHref("link-email", heroEmailHref);
+
+      // Bind contact links
+      setHref("link-linkedin-contact", heroLinkedinHref);
+      setHref("link-github-contact", heroGithubHref);
+      setHref("link-email-contact", heroEmailHref);
+
+      // Profile photo
+      const photoURL = portData.avatar?.photoURL || "";
+      const imgEl = document.getElementById("profile-pic");
+      const placeholderEl = document.getElementById("profile-placeholder");
+      if (imgEl && placeholderEl) {
+        imgEl.src = photoURL || "";
+        imgEl.style.display = photoURL ? "block" : "none";
+        placeholderEl.style.display = photoURL ? "none" : "flex";
+
+        imgEl.onerror = function() {
+          this.style.display = "none";
+          this.removeAttribute("src");
+          placeholderEl.style.display = "flex";
+        };
+      }
+
+      // Also update the login logo photo (uses RS as fallback)
+      const loginLogo = document.getElementById("login-logo-wrap");
+      if (loginLogo) {
+        if (photoURL) {
+          loginLogo.innerHTML = `<img src="${photoURL}" alt="RS" onerror="this.parentElement.textContent='RS'"/>`;
+        }
+      }
+    }
+
     function render() {
       if (!portData) return;
       const E = editMode;
@@ -1897,18 +2052,6 @@
       s("c-avail", fi("e-avail", portData.hero.availability));
       s("c-eyebrow", fi("e-eyebrow", portData.hero.eyebrow));
       s("c-herosub", ta("e-herosub", portData.hero.subtitle));
-
-      // CV link
-      const cvEl = document.getElementById("c-link-cv");
-      if (cvEl) cvEl.href = portData.hero.cvLink || "#";
-
-      // GitHub hero button
-      const ghEl = document.getElementById("c-link-github");
-      if (ghEl) ghEl.href = portData.hero.githubUrl || "#";
-
-      // Live projects button
-      const liveEl = document.getElementById("c-link-live");
-      if (liveEl) liveEl.href = portData.hero.liveUrl || "#";
 
       if (E) {
         // inject CV / GitHub / Live URL edit fields below the subtitle
@@ -1942,40 +2085,16 @@
       }
 
       /* ── avatar photo (Feature 2) ── */
-      const ringEl = document.getElementById("c-av-ring");
-      if (ringEl) {
-        const photoURL = portData.avatar.photoURL || "";
-        // Keep the .av-online dot
-        const onlineDot = ringEl.querySelector(".av-online");
-        ringEl.innerHTML = "";
-        if (photoURL) {
-          const img = document.createElement("img");
-          img.src = photoURL;
-          img.alt = portData.avatar.name || "Profile";
-          img.onerror = function () {
-            this.style.display = "none";
-            const span = document.createElement("span");
-            span.id = "c-av-init";
-            span.textContent = portData.avatar.initials || "RS";
-            ringEl.insertBefore(span, ringEl.firstChild);
-          };
-          ringEl.appendChild(img);
+      // Photo + placeholder are driven by loadData(); here we only manage the optional initials edit overlay.
+      const initEl = document.getElementById("c-av-init");
+      const photoURL = portData.avatar?.photoURL || "";
+      if (initEl) {
+        if (E && !photoURL) {
+          initEl.style.display = "flex";
+          s("c-av-init", fi("e-av-init", portData.avatar.initials || "RS", "ef-bigname"));
         } else {
-          const span = document.createElement("span");
-          span.id = "c-av-init";
-          span.textContent = "";
-          ringEl.appendChild(span);
-          s("c-av-init", fi("e-av-init", portData.avatar.initials, "ef-bigname"));
-        }
-        if (onlineDot) ringEl.appendChild(onlineDot); else {
-          const d = document.createElement("div");
-          d.className = "av-online";
-          ringEl.appendChild(d);
-        }
-        // Also update the login logo
-        const loginLogo = document.getElementById("login-logo-wrap");
-        if (loginLogo && photoURL) {
-          loginLogo.innerHTML = `<img src="${photoURL}" alt="RS" onerror="this.parentElement.textContent='RS'"/>`;
+          initEl.style.display = "none";
+          s("c-av-init", "");
         }
       }
 
